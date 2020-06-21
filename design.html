@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width" />
+		<title>FIH 工業互聯網智能系統</title>
+		<link rel='shortcut icon' href="Res/Client/img/title.ico" />
+		<link rel="stylesheet" type="text/css" href="Res/Client/css/design.css"/>
+		<link rel="stylesheet" type="text/css" href="Res/Server/dragula/dragula.min.css"/>		
+		<style type="text/css">
+			#swith{
+				position: fixed;
+				top: 0;
+				left: 0;
+				height: 100%;
+				width: 300px;
+				background: #eee;
+            	border-radius:5px; 
+				transition: width 1s ease-out;
+				-moz-transition: width 1s ease-out;	/* Firefox 4 */
+				-webkit-transition: width 1s ease-out;	/* Safari 和 Chrome */
+				-o-transition: width 1s ease-out;	/* Opera */                      	
+			}			
+			#swith:hover {
+         	   background: #E8E6E6;
+        	}
+        	#swith table{
+        		width: 100%;
+        		height: 100%;
+        		text-align: right;
+        		color: blueviolet;
+            	font-size: 20px;
+            	font-weight: bold;
+        	}
+			#template{
+				position: fixed;
+				top: 0;
+				left: 0;
+				height: 100%;
+				width: 290px;
+				background: beige;
+				transition: width 1s ease-out;
+				-moz-transition: width 1s ease-out;	/* Firefox 4 */
+				-webkit-transition: width 1s ease-out;	/* Safari 和 Chrome */
+				-o-transition: width 1s ease-out;	/* Opera */
+			}
+			#template .inner{
+				height: 100%;
+				width: 100%;
+				overflow: auto;
+			}
+			
+			/*滚动条样式*/
+	        #template .inner::-webkit-scrollbar {
+	            width: 5px;
+	            height: 5px;
+	        }
+	        #template .inner::-webkit-scrollbar-track {
+	            background: #C5EFF7;
+	        }
+	 
+	        #template .inner::-webkit-scrollbar-thumb {
+	            background: #89CDDA;
+	            border-radius: 3px;
+	        }
+	        
+	        #template .inner fieldset{
+	        	margin: 5px;
+	        	padding: 5px;
+	        }
+	        #template .inner fieldset legend input{
+	        	width: 15px;
+	        }	        	       
+	        .row{
+				width: 100%;
+			}
+			.row .col{
+				float: left;				
+			}
+			table{
+				width: 100%;
+			}
+			#grid{
+				min-height: 30px;
+			}	
+			#tb,#block{
+				min-height: 60px;
+			}					
+			#design{
+				width: 90%;
+				margin: 0 auto;
+				border: 1px dashed gray;
+				min-height: 500px;
+				margin-top: 10px;
+			}
+			a.blank,a.blue,a.red,a.green,a.yellow,a.purple,a.pink{
+				display: block;
+				background-size: 100% 100%;				
+				height: 90px;
+				text-align: center;
+				cursor: pointer;
+				margin-top: 10px;
+				text-decoration: none;											
+			}				
+			a.blank img,a.blue img,a.red img,a.green img,a.yellow img,a.purple img,a.pink img{
+				margin-top: 15px;
+				height: 50%;				
+			}
+			a.blank span,a.blue span,a.red span,a.green span,a.yellow span,a.purple span,a.pink span{
+				color: white;
+				font-size: 14px;
+				display: block;
+				margin-top: 5px;
+			}
+			a.blank{
+				background: #555;
+			}
+			a.blue{
+				background: url(Res/Client/img/bg/blue.png);
+			}
+			a.red{
+				background: url(Res/Client/img/bg/red.png);
+			}
+			a.green{
+				background: url(Res/Client/img/bg/green.png);
+			}
+			a.yellow{
+				background: url(Res/Client/img/bg/yellow.png);
+			}
+			a.purple{
+				background: url(Res/Client/img/bg/purple.png);
+			}
+			a.pink{
+				background: url(Res/Client/img/bg/pink.png);
+			}
+			#recycle{
+				min-height: 100px;
+				border: 10px solid #0F9E5E;
+			}				
+			#template .inner .tools a{
+				display: block;
+				float: left;
+				width: 40%;
+				margin: 10px 4% 0px 4%;
+				height: 30px;				
+				font-size: 20px;
+				text-align: center;
+				line-height: 30px;
+				border: 1px solid #C9C9C9;
+				border-radius: 5px;
+				background: white;
+				color: #555555;
+				cursor: pointer;				
+			}
+			#template .inner .tools a:hover{
+				border: 1px solid #33ABA0;
+				text-decoration: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="swith" status="on">			
+			<table><tr><td>«</td></tr></table>
+		</div>
+		<div id="template">
+			<div class="inner">
+				<div class="tools">
+					<a id="btnSave">保 存</a>
+					<a id="btnPreview">预览</a>
+				</div>
+				<div style="clear: both;"></div>
+				<fieldset>
+					<legend>栅格列:<input type="text" name="cols" value="3"/></legend>
+					<div id="grid">
+						<div class="row">
+							<div class="col" style="width: 33.33%;">				
+								<div class="table" style="min-height: 30px;border: 1px dotted black;">
+									<input type="text" name="col" value="33.33" style="height: 30px;width: 100%;padding: 0;border: 0;" />
+								</div>
+							</div>
+							<div class="col" style="width: 33.33%;">				
+								<div class="table" style="min-height: 30px;border: 1px dotted black;">
+									<input type="text" name="col" value="33.33" style="height: 30px;width: 100%;padding: 0;border: 0;" />
+								</div>
+							</div>
+							<div class="col" style="width: 33.33%;">				
+								<div class="table" style="min-height: 30px;border: 1px dotted black;">
+									<input type="text" name="col" value="33.33" style="height: 30px;width: 100%;padding: 0;border: 0;" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+				<fieldset>
+					<legend>表格行:<input type="text" name="trs" value="2"/>表格列:<input type="text" name="tds" value="3"/></legend>
+					<div id="tb">
+						<table>
+							<tr>
+								<td width="33.33%">
+									<div class="box" style="min-height: 30px;border: 1px solid black;">
+										<input type="text" name="td" value="33.33" style="height: 30px;width: 100%;padding: 0;border: 0;" />
+									</div>
+								</td>
+								<td width="33.33%">
+									<div class="box" style="min-height: 30px;border: 1px solid black;">
+										<input type="text" name="td" value="33.33" style="height: 30px;width: 100%;padding: 0;border: 0;" />
+									</div>
+								</td>
+								<td width="33.33%">
+									<div class="box" style="min-height: 30px;border: 1px solid black;">
+										<input type="text" name="td" value="33.33" style="height: 30px;width: 100%;padding: 0;border: 0;" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td width="33.33%">
+									<div class="box" style="min-height: 30px;border: 1px solid black;">
+										<input type="text" name="td" value="33.33" style="height: 30px;width: 100%;padding: 0;border: 0;" />
+									</div>
+								</td>
+								<td width="33.33%">
+									<div class="box" style="min-height: 30px;border: 1px solid black;">
+										<input type="text" name="td" value="33.33" style="height: 30px;width: 100%;padding: 0;border: 0;" />
+									</div>
+								</td>
+								<td width="33.33%">
+									<div class="box" style="min-height: 30px;border: 1px solid black;">
+										<input type="text" name="td" value="33.33" style="height: 30px;width: 100%;padding: 0;border: 0;" />
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</fieldset>
+				<fieldset>
+					<legend>数据块</legend>
+					<table id="tbBlock">
+						<tr>
+							<td>
+								<span>文本:</span>
+								<input type="text" value="块" name="text" style="width: 80px;" />
+							</td>
+							<td>
+								<span>链接:</span>
+								<input type="text" value="javascript:;" name="url" style="width: 80px;" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<span>背景:</span>
+								<select name="bg" style="width: 84px;">
+									<option value="blank">blank</option>
+									<option value="blue">blue</option>
+									<option value="red">red</option>
+									<option value="green">green</option>
+									<option value="yellow">yellow</option>
+									<option value="purple">purple</option>
+									<option value="pink">pink</option>
+								</select>
+							</td>
+							<td>
+								<span>图标:</span>
+								<select name="icon" style="width: 84px;">
+									<option value="chart.png">chart.png</option>
+									<option value="brush.png">brush.png</option>									
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<span>左距:</span>
+								<select name="leftBorder" style="width: 84px;">
+									<option value="0px">0px</option>
+									<option value="5px">5px</option>									
+								</select>
+							</td>
+							<td>
+								<span>右距:</span>
+								<select name="rightBorder" style="width: 84px;">
+									<option value="0px">0px</option>
+									<option value="5px">5px</option>
+								</select>
+							</td>
+						</tr>
+					</table>
+					<div id="block">
+						<a class="blank" target="_blank" href="javascript:;">							
+							<img src="Res/Client/img/icon/chart.png"/>
+							<span>块</span>												
+						</a>
+					</div>
+				</fieldset>
+				<fieldset>
+					<legend>轮播图</legend>
+					<div id="carousel">
+						<h2 style="margin: 0;padding: 0;margin-top: 10px;margin-left: 5px;margin-right: 5px;"><img src="Res/Client/img/carousel.gif" height="200" width="100%"/></h2>
+					</div>
+				</fieldset>
+				<fieldset>
+					<legend>回收站</legend>
+					<div id="recycle">
+						
+					</div>
+				</fieldset>
+			</div>
+		</div>
+		<div class="design" id="design"></div>
+		<script src="Res/Server/jquery/jquery-1.10.2.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="Res/Server/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+		<!--<script src="Res/Server/dragula/dragula.min.js" type="text/javascript" charset="utf-8"></script>-->		
+		<script src="Res/Server/dragula/dragula.js?t=asfLz" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			function guid() {
+			    function S4() {
+			       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+			    }
+			    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+			}
+			$("#swith").click(function(){
+				var status = $(this).attr("status");
+                if (status == "on") {
+                    $(this).attr("status", "off");
+                    $("#swith table td").html("»");
+                    $(this).css("width", "10px");
+                    $("#template").css("width", "0px");                    
+                } else {
+                    $(this).attr("status", "on");
+                    $("#swith table td").html("«");
+                    $(this).css("width", "300px");
+                    $("#template").css("width", "290px");
+                }
+			});	
+			$("#grid .row .col .table input[name=col]").blur(function(){
+				var col = $(this).val();
+				$(this).parent().parent().css("width",col+"%");
+			});
+			$("#template .inner input[name=cols]").blur(function(){
+				var reg = /^\+?[1-9]$/;
+				var cols = $(this).val();
+				if(!reg.test(cols)){
+					layer.msg("不是正整数1~9", { time: 5000, icon: 2 });
+					return false;
+				}
+				var per = 100.0/cols+"";
+				if(per.indexOf('.')>0){
+					per = per.substring(0,per.indexOf(".") + 3);
+				}
+				var txtHtml="<div class='row'>";
+				for(var i=0;i<cols;i++){
+					txtHtml+="<div class='col' style='width: "+per+"%;'><div class='table' style='min-height: 30px;border: 1px dotted black;'><input type='text' name='col' value='"+per+"' style='height: 30px;width: 100%;padding: 0;border: 0;' /></div></div>";
+				}
+				txtHtml+="</div>";
+				$("#grid").html(txtHtml);
+				$("#grid .row .col .table input[name=col]").blur(function(){
+					var col = $(this).val();
+					$(this).parent().parent().css("width",col+"%");
+				});
+			});
+			$("#tb td .box input[name=td]").blur(function(){
+				var td = $(this).val();
+				$(this).parent().parent().attr("width",td+"%");
+			});
+			$("#template .inner input[name=trs]").blur(function(){
+				var reg = /^\+?[1-9]$/;
+				var trs = $(this).val();
+				var tds = $("#template .inner input[name=tds]").val();
+				if(!reg.test(trs)||!reg.test(tds)){
+					layer.msg("不是正整数1~9", { time: 5000, icon: 2 });
+					return false;
+				}
+				var per = 100.0/tds+"";
+				if(per.indexOf('.')>0){
+					per = per.substring(0,per.indexOf(".") + 3);
+				}
+				var txtHtml="<table>";
+				for(var i=0;i<trs;i++){
+					txtHtml+="<tr>";
+					for(var j=0;j<tds;j++){
+						txtHtml+="<td width='"+per+"%'><div class='box' style='min-height: 30px;border: 1px solid black;'><input type='text' name='td' value='"+per+"' style='height: 30px;width: 100%;padding: 0;border: 0;' /></div></td>";	
+					}
+					txtHtml+="</tr>";
+				}
+				txtHtml+="</table>";
+				$("#tb").html(txtHtml);
+				$("#tb td .box input[name=td]").blur(function(){
+					var td = $(this).val();
+					$(this).parent().parent().attr("width",td+"%");
+				});
+			});
+			$("#template .inner input[name=tds]").blur(function(){
+				var reg = /^\+?[1-9]$/;
+				var trs = $("#template .inner input[name=trs]").val();
+				var tds = $(this).val();
+				if(!reg.test(trs)||!reg.test(tds)){
+					layer.msg("不是正整数1~9", { time: 5000, icon: 2 });
+					return false;
+				}
+				var per = 100.0/tds+"";
+				if(per.indexOf('.')>0){
+					per = per.substring(0,per.indexOf(".") + 3);
+				}
+				var txtHtml="<table>";
+				for(var i=0;i<trs;i++){
+					txtHtml+="<tr>";
+					for(var j=0;j<tds;j++){
+						txtHtml+="<td width='"+per+"%'><div class='box' style='min-height: 30px;border: 1px solid black;'><input type='text' name='td' value='"+per+"' style='height: 30px;width: 100%;padding: 0;border: 0;' /></div></td>";	
+					}
+					txtHtml+="</tr>";
+				}
+				txtHtml+="</table>";
+				$("#tb").html(txtHtml);
+				$("#tb td .box input[name=td]").blur(function(){
+					var td = $(this).val();
+					$(this).parent().parent().attr("width",td+"%");
+				});
+			});
+			$("#tbBlock input[name=text]").blur(function(){
+				$("#block a span").html($(this).val());
+			});
+			$("#tbBlock input[name=url]").blur(function(){
+				$("#block a").attr("href",$(this).val());
+			});
+			$("#tbBlock select[name=bg]").blur(function(){
+				$("#block a").attr("class",$(this).val());
+			});
+			$("#tbBlock select[name=icon]").blur(function(){
+				$("#block a img").attr("src","Res/Client/img/icon/"+$(this).val());
+			});
+			$("#tbBlock select[name=leftBorder]").blur(function(){
+				$("#block a").css("margin-left",$(this).val());
+			});
+			$("#tbBlock select[name=rightBorder]").blur(function(){
+				$("#block a").css("margin-right",$(this).val());
+			});
+			var drake = dragula([document.getElementById('grid'),document.getElementById('tb'),document.getElementById('block'),document.getElementById('carousel'),document.getElementById('recycle'), document.getElementById('design')], {								
+				copy: function (el, source) {
+				    return source === document.getElementById('grid')
+				    || source === document.getElementById('tb')
+				    || source === document.getElementById('block')
+				    || source === document.getElementById('carousel');
+				},
+				accepts: function (el, target) {
+					if(target===document.getElementById('recycle')){
+						return true;
+					}
+					if(el.tagName==="A"){
+						if(target.children.length>0){
+							return false;
+						}
+						return target.getAttribute("class")==="box";
+					}
+					if(el.tagName==="TABLE"){
+						if(target.children.length>0){
+							return false;
+						}
+						return target.getAttribute("class")==="table";
+					}
+					if(el.tagName==="DIV"){
+						return target.getAttribute("class")==="design";
+					}
+					if(el.tagName==="H2"){
+						if(target.children.length>0){
+							return false;
+						}
+						return target.getAttribute("class")==="table";
+					}
+				    return target !== document.getElementById('grid')
+					&& target !== document.getElementById('tb')
+				    && target !== document.getElementById('block')
+				    && target !== document.getElementById('carousel');
+				},
+				removeOnSpill: false
+			}).on('drop', function (el) {
+				if(el.tagName=="DIV"){
+					var chs = el.children;
+				    for(var i=0;i<chs.length;i++){
+				    	var ch = chs[i];
+				    	var chs2 = ch.children;
+				    	for(var j=0;j<chs2.length;j++){
+				    		var ch2 = chs2[j];			    		
+				    		var id = ch2.getAttribute('id');
+				    		if(!id){
+				    			var chs3 = ch2.children;
+					    		for(var k=0;k<chs3.length;k++){
+					    			ch2.removeChild(chs3[k]);
+					    		}
+				    			var gid = guid();
+				    			ch2.setAttribute('id',gid);
+				    			drake.containers.push(document.getElementById(gid));
+				    		}
+				    	}
+				    }
+				}else if(el.tagName=="TABLE"){
+					var tbodys = el.children;
+				    for(var i=0;i<tbodys.length;i++){
+				    	var tbody = tbodys[i];
+				    	var trs = tbody.children;
+				    	for(var j=0;j<trs.length;j++){
+				    		var tr = trs[j];
+				    		var tds = tr.children;
+				    		for(var k=0;k<tds.length;k++){
+				    			var td = tds[k];
+				    			var boxs = td.children;
+				    			for(var m=0;m<boxs.length;m++){
+				    				var box = boxs[m];			    				
+				    				var id = box.getAttribute('id');
+						    		if(!id){
+						    			var chds = box.children;
+					    				for(var n=0;n<chds.length;n++){
+					    					box.removeChild(chds[n]);
+					    				}
+						    			var gid = guid();
+						    			box.setAttribute('id',gid);
+						    			drake.containers.push(document.getElementById(gid));
+						    		}
+				    			}
+				    		}
+				    	}
+				    }
+				}				
+			});			
+		</script>
+	</body>
+</html>
